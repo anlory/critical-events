@@ -1,6 +1,6 @@
 # Critical Event Log Reader
 
-This tool reads and displays Android critical event logs stored in protobuf format.
+This tool reads and display Android critical event logs stored in protobuf format.
 
 ## Overview
 
@@ -13,6 +13,36 @@ The critical event log system in Android records important system events such as
 - Package installation events
 
 These logs are stored in protobuf format as defined in [critical_event_log.proto](critical_event_log.proto).
+
+## Installation
+
+### With uv (recommended)
+
+Install with [uv](https://docs.astral.sh/uv/):
+
+```bash
+uv tool install critical-events --editable
+```
+
+After installation, you can run the tool directly:
+
+```bash
+critical-events <protobuf_file>
+```
+
+### Manual installation
+
+Install dependencies:
+
+```bash
+pip install protobuf
+```
+
+Or with [uv](https://docs.astral.sh/uv/):
+
+```bash
+uv pip install protobuf
+```
 
 ## Prerequisites
 
@@ -34,31 +64,43 @@ These logs are stored in protobuf format as defined in [critical_event_log.proto
 
 ## Usage
 
+Once installed as a tool with uv, you can run the tool directly:
+
+```bash
+critical-events <protobuf_file>
+```
+
+You can also run it directly with Python:
+
+```bash
+python -m read_critical_events <protobuf_file>
+```
+
 ### Basic Usage
 
 ```bash
-python read_critical_events.py <protobuf_file>
+critical-events <protobuf_file>
 ```
 
-The script reads files in `CriticalEventLogStorageProto` format.
+By default, the script assumes the file is in `CriticalEventLogStorageProto` format.
 
 ### Automatic File Pulling from Android Device
 
 ```bash
 # Automatically pull and read from connected Android device
-python read_critical_events.py --auto
+critical-events --auto
 ```
 
-This will pull the file from the default location `/data/misc/critical-events/critical_event_log.pb` on the connected Android device.
+This will pull the file from the default location `/data/misc/critical-events/log.pb` on the connected Android device.
 
 ### Filtering by Event Types
 
 ```bash
 # Show only specific event types
-python read_critical_events.py <protobuf_file> --event-types anr,java_crash
+critical-events <protobuf_file> --event-types anr,java_crash
 
 # Pull from device and show only watchdog events
-python read_critical_events.py --auto --event-types watchdog
+critical-events --auto --event-types watchdog
 ```
 
 Available event types:
@@ -70,6 +112,13 @@ Available event types:
 - `system_server_started`
 - `install_packages`
 - `excessive_binder_calls`
+
+### Debug Mode
+
+To see raw file information:
+```bash
+critical-events <protobuf_file> debug
+```
 
 ## Example Output
 
@@ -92,10 +141,6 @@ Event #2:
     Exception: java.lang.NullPointerException
     Process: com.example.app (PID: 5678, UID: 10123)
     Process Class: DATA_APP
-
-Event #3:
-  Time: 2023-05-15 14:32:01.012 (1684157521012 ms)
-  Type: System Server Started
 ```
 
 ## Protobuf Message Types
