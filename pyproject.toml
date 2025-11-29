@@ -1,0 +1,12 @@
+[project]
+name = "critical-events"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "protobuf>=6.33.1",
+]
+
+[project.scripts]
+critical-events = "read_critical_events:main"
